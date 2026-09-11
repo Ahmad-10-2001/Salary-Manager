@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Salary Manager</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💰 Salary Manager</h1>
+
+    <div class="card balance-card">
+        <p>Current Balance</p>
+        <h2 id="balance">0</h2>
+    </div>
+
+
+    <div class="card">
+
+        <h3>Add Transaction</h3>
+
+        <select id="type">
+            <option value="income">+ Income</option>
+            <option value="expense">- Expense</option>
+        </select>
+
+
+        <input 
+            id="amount" 
+            type="number" 
+            placeholder="Amount e.g. 500">
+
+
+        <select id="category">
+
+            <option value="Salary">Salary</option>
+            <option value="Food">Food</option>
+            <option value="Bike/Fuel">Bike/Fuel</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Bills">Bills</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Health">Health</option>
+            <option value="Travel">Travel</option>
+            <option value="Family">Family</option>
+            <option value="Other">Other</option>
+
+        </select>
+
+
+        <input 
+            id="comment" 
+            placeholder="Example: Bike petrol">
+
+
+        <button onclick="addTransaction()">
+            Save Transaction
+        </button>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h3>Weekly Report</h3>
+
+        <div id="report">
+            No data
+        </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <h3>Transactions</h3>
+
+        <div id="transactions">
+            No transactions
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
