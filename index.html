@@ -1,106 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Salary Manager</title>
+<meta charset="UTF-8">
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <link rel="manifest" href="manifest.json">
-    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Salary Manager</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="manifest" href="manifest.json">
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-    <h1>💰 Salary Manager</h1>
 
-    <div class="card balance-card">
-        <p>Current Balance</p>
-        <h2 id="balance">0</h2>
-    </div>
-
-
-    <div class="card">
-
-        <h3>Add Transaction</h3>
-
-        <select id="type">
-            <option value="income">+ Income</option>
-            <option value="expense">- Expense</option>
-        </select>
-
-
-        <input 
-            id="amount" 
-            type="number" 
-            placeholder="Amount e.g. 500">
-
-
-        <select id="category">
-
-            <option value="Salary">Salary</option>
-            <option value="Food">Food</option>
-            <option value="Bike/Fuel">Bike/Fuel</option>
-            <option value="Groceries">Groceries</option>
-            <option value="Bills">Bills</option>
-            <option value="Shopping">Shopping</option>
-            <option value="Health">Health</option>
-            <option value="Travel">Travel</option>
-            <option value="Family">Family</option>
-            <option value="Other">Other</option>
-
-        </select>
-
-
-        <input 
-            id="comment" 
-            placeholder="Example: Bike petrol">
-
-
-        <button onclick="addTransaction()">
-            Save Transaction
-        </button>
-
-    </div>
+<h1>💰 Salary Manager</h1>
 
 
 
-    <div class="card">
+<div class="card balance-card">
 
-        <h3>Weekly Report</h3>
+<p>Current Balance</p>
 
-        <div id="report">
-            No data
-        </div>
+<h2 id="balance">0</h2>
 
-    </div>
+</div>
 
 
 
-    <div class="card">
 
-        <h3>Transactions</h3>
+<div class="card">
 
-        <div id="transactions">
-            No transactions
-        </div>
 
-    </div>
+<h3>Add Transaction</h3>
+
+
+<select id="type">
+
+<option value="income">+ Income</option>
+
+<option value="expense">- Expense</option>
+
+</select>
+
+
+
+<input id="amount"
+type="number"
+placeholder="Amount">
+
+
+
+<select id="category">
+
+<option>Salary</option>
+<option>Food</option>
+<option>Bike/Fuel</option>
+<option>Groceries</option>
+<option>Bills</option>
+<option>Shopping</option>
+<option>Health</option>
+<option>Travel</option>
+<option>Family</option>
+<option>Other</option>
+
+</select>
+
+
+
+<input id="comment"
+placeholder="Comment">
+
+
+
+<button onclick="addTransaction()">
+Save
+</button>
 
 
 </div>
 
 
+
+
+
+<div class="card">
+
+<h3>Reports</h3>
+
+
+<button onclick="showWeekly()">
+Weekly Report
+</button>
+
+
+<button onclick="showMonthly()">
+Monthly Report
+</button>
+
+
+<div id="report"></div>
+
+
+</div>
+
+
+
+
+
+<div class="card">
+
+
+<h3>Backup</h3>
+
+
+<button onclick="exportData()">
+Export Backup
+</button>
+
+
+<input type="file"
+id="importFile"
+accept=".json">
+
+
+<button onclick="importData()">
+Import Backup
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+<div class="card">
+
+
+<h3>Transactions</h3>
+
+
+<div id="transactions"></div>
+
+
+</div>
+
+
+
+</div>
+
+
+
 <script src="script.js"></script>
+
+
 <script>
+
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
+
+navigator.serviceWorker.register(
+"service-worker.js"
+);
+
 }
+
 </script>
 
+
 </body>
+
 </html>
