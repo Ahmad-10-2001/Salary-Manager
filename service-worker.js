@@ -1,4 +1,4 @@
-const CACHE_NAME = "salary-manager-v1";
+const CACHE_NAME = "salary-manager-v2";
 
 const FILES_TO_CACHE = [
   "./",
