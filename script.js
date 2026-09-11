@@ -1,76 +1,115 @@
-let transactions = JSON.parse(
-    localStorage.getItem("transactions")
-) || [];
+let transactions =
+JSON.parse(localStorage.getItem("transactions")) || [];
+
+
+
+function save(){
+
+localStorage.setItem(
+"transactions",
+JSON.stringify(transactions)
+);
+
+render();
+
+}
+
+
 
 
 
 function addTransaction(){
 
 
-    let type = document.getElementById("type").value;
+let item={
 
-    let amount = Number(
-        document.getElementById("amount").value
-    );
+id:Date.now(),
 
+type:document.getElementById("type").value,
 
-    let category =
-        document.getElementById("category").value;
+amount:Number(
+document.getElementById("amount").value
+),
 
-
-    let comment =
-        document.getElementById("comment").value;
-
+category:
+document.getElementById("category").value,
 
 
-    if(!amount){
-
-        alert("Enter amount");
-
-        return;
-
-    }
+comment:
+document.getElementById("comment").value,
 
 
+date:new Date().toISOString()
 
-    let transaction = {
 
-
-        type:type,
-
-        amount:amount,
-
-        category:category,
-
-        comment:comment,
-
-        date:new Date().toLocaleString()
-
-    };
+};
 
 
 
-    transactions.unshift(transaction);
+if(!item.amount){
+
+alert("Enter amount");
+
+return;
+
+}
 
 
-
-    localStorage.setItem(
-        "transactions",
-        JSON.stringify(transactions)
-    );
+transactions.unshift(item);
 
 
-
-    document.getElementById("amount").value="";
-
-    document.getElementById("comment").value="";
-
-
-    render();
+save();
 
 
 }
 
+
+
+
+
+function deleteTransaction(id){
+
+
+transactions =
+transactions.filter(
+x=>x.id!==id
+);
+
+
+save();
+
+
+}
+
+
+
+
+function editTransaction(id){
+
+
+let item =
+transactions.find(
+x=>x.id===id
+);
+
+
+let amount =
+prompt(
+"Update amount",
+item.amount
+);
+
+
+if(amount){
+
+item.amount=Number(amount);
+
+save();
+
+}
+
+
+}
 
 
 
@@ -78,121 +117,220 @@ function addTransaction(){
 function render(){
 
 
-    let balance=0;
+let balance=0;
 
 
-    let report={};
+let html="";
 
 
 
-    transactions.forEach(item=>{
+transactions.forEach(t=>{
 
 
-        if(item.type==="income"){
+if(t.type==="income")
+balance+=t.amount;
 
-            balance += item.amount;
+else
+balance-=t.amount;
 
-        }
 
-        else {
 
+html+=`
 
-            balance -= item.amount;
+<div class="transaction">
 
 
+<div class="${t.type}">
 
-            report[item.category] =
-            (report[item.category] || 0)
-            + item.amount;
+${t.type==="income"?"+":"-"}
+${t.amount}
 
-        }
+</div>
 
 
-    });
+<b>${t.category}</b>
 
+<br>
 
+${t.comment}
 
-    document.getElementById("balance")
-    .innerText =
-    balance.toLocaleString();
 
+<div class="date">
 
+${new Date(t.date).toLocaleString()}
 
-    let list="";
+</div>
 
 
 
-    transactions.forEach(item=>{
+<button class="edit"
+onclick="editTransaction(${t.id})">
 
+Edit
 
-        list += `
+</button>
 
-        <div class="transaction">
 
-        <div class="${item.type}">
+<button class="delete"
+onclick="deleteTransaction(${t.id})">
 
-        ${item.type==="income" ? "+" : "-"}
-        ${item.amount}
+Delete
 
-        </div>
+</button>
 
 
-        <b>${item.category}</b>
 
+</div>
 
-        <br>
+`;
 
-        ${item.comment}
+});
 
 
-        <div class="date">
 
-        ${item.date}
+document.getElementById("balance")
+.innerText=
+balance.toLocaleString();
 
-        </div>
 
 
-        </div>
+document.getElementById("transactions")
+.innerHTML=
+html || "No transactions";
 
-        `;
-
-
-    });
-
-
-
-    document.getElementById("transactions")
-    .innerHTML =
-    list || "No transactions";
-
-
-
-
-
-    let reportHTML="";
-
-
-    Object.keys(report).forEach(category=>{
-
-
-        reportHTML += `
-
-        ${category}:
-        ${report[category]}
-        <br>
-
-        `;
-
-
-    });
-
-
-
-    document.getElementById("report")
-    .innerHTML =
-    reportHTML || "No expenses";
 
 }
+
+
+
+
+function report(days){
+
+
+let total={};
+
+
+let limit =
+Date.now()-days*86400000;
+
+
+
+transactions.forEach(t=>{
+
+
+if(
+t.type==="expense" &&
+new Date(t.date).getTime()>limit
+){
+
+
+total[t.category]=
+(total[t.category]||0)
++t.amount;
+
+
+}
+
+
+});
+
+
+
+return Object.keys(total)
+.map(
+x=>`${x}: ${total[x]}`
+)
+.join("<br>");
+
+}
+
+
+
+function showWeekly(){
+
+document.getElementById("report")
+.innerHTML=
+report(7)||"No expenses";
+
+}
+
+
+
+function showMonthly(){
+
+document.getElementById("report")
+.innerHTML=
+report(30)||"No expenses";
+
+}
+
+
+
+
+function exportData(){
+
+
+let blob =
+new Blob(
+[
+JSON.stringify(transactions)
+],
+{
+type:"application/json"
+}
+);
+
+
+let a=document.createElement("a");
+
+
+a.href=
+URL.createObjectURL(blob);
+
+
+a.download=
+"salary-backup.json";
+
+
+a.click();
+
+
+}
+
+
+
+
+function importData(){
+
+
+let file =
+document.getElementById("importFile")
+.files[0];
+
+
+let reader =
+new FileReader();
+
+
+reader.onload=function(e){
+
+
+transactions =
+JSON.parse(e.target.result);
+
+
+save();
+
+
+};
+
+
+
+reader.readAsText(file);
+
+
+}
+
 
 
 
