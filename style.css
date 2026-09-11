@@ -1,0 +1,132 @@
+body {
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    background:#f2f2f7;
+
+    margin:0;
+
+    padding:20px;
+
+}
+
+
+.container {
+
+    max-width:500px;
+
+    margin:auto;
+
+}
+
+
+h1 {
+
+    text-align:center;
+
+}
+
+
+
+.card {
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+
+}
+
+
+
+.balance-card {
+
+    text-align:center;
+
+}
+
+
+
+#balance {
+
+    font-size:35px;
+
+}
+
+
+
+input, select, button {
+
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:10px;
+
+    border-radius:12px;
+
+    border:1px solid #ddd;
+
+    font-size:16px;
+
+}
+
+
+
+button {
+
+
+    background:#111;
+
+    color:white;
+
+    border:none;
+
+}
+
+
+
+.transaction {
+
+
+    padding:12px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+
+
+.income {
+
+    color:green;
+
+    font-weight:bold;
+
+}
+
+
+
+.expense {
+
+    color:red;
+
+    font-weight:bold;
+
+}
+
+
+
+.date {
+
+    color:#777;
+
+    font-size:12px;
+
+}
