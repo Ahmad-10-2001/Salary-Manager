@@ -1,70 +1,211 @@
-<!doctype html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Salary Manager V3</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>💰 Salary Manager</h1>
-      <div class="card">
-        <h3>Balance</h3>
-        <h1 id="balance">0</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Salary Manager">
+  <meta name="theme-color" content="#111111">
+  <title>Salary Manager</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <h1 class="app-title">💰 Salary Manager</h1>
+
+  <!-- Balance Card -->
+  <div class="card balance-card">
+    <div class="balance-label">Current Balance</div>
+    <div class="balance-amount" id="balanceDisplay">₨ 0</div>
+    <div class="balance-row">
+      <div class="balance-sub income-bg">
+        <span class="balance-sub-label">Income</span>
+        <span id="totalIncome">₨ 0</span>
       </div>
-      <div class="card">
-        <h3>Add Transaction</h3>
-        <select id="type">
-          <option value="income">+ Income / Salary</option>
-          <option value="expense">- Expense</option></select
-        ><input id="amount" type="number" placeholder="Amount" /><select
-          id="category"
-        >
-          <option>Salary</option>
-          <option>Food</option>
-          <option>Bike/Fuel</option>
-          <option>Groceries</option>
-          <option>Bills</option>
-          <option>Shopping</option>
-          <option>Health</option>
-          <option>Travel</option>
-          <option>Family</option>
-          <option>Other</option></select
-        ><input id="comment" placeholder="Comment" /><button
-          onclick="addTransaction()"
-        >
-          Save
-        </button>
-      </div>
-      <div class="card">
-        <h3>Budgets</h3>
-        <div id="budgets"></div>
-      </div>
-      <div class="card">
-        <h3>Udhaar</h3>
-        <select id="debtType">
-          <option value="receive">Person owes me</option>
-          <option value="pay">I owe person</option></select
-        ><input id="person" placeholder="Person" /><input
-          id="debtAmount"
-          type="number"
-          placeholder="Amount"
-        /><input id="debtNote" placeholder="Reason" /><button
-          onclick="addDebt()"
-        >
-          Add
-        </button>
-        <div id="debts"></div>
-      </div>
-      <div class="card">
-        <h3>Reports</h3>
-        <div id="report"></div>
-      </div>
-      <div class="card">
-        <h3>Transactions</h3>
-        <div id="transactions"></div>
+      <div class="balance-sub expense-bg">
+        <span class="balance-sub-label">Expense</span>
+        <span id="totalExpense">₨ 0</span>
       </div>
     </div>
-    <script src="script.js"></script>
-  </body>
+  </div>
+
+  <!-- Add Transaction -->
+  <div class="card">
+    <h3 class="card-title">Add Transaction</h3>
+    <div class="form-group">
+      <select id="txType">
+        <option value="income">+ Income / Salary</option>
+        <option value="expense">- Expense</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input id="txAmount" type="number" inputmode="numeric" placeholder="Amount (e.g. 5000)">
+    </div>
+    <div class="form-group">
+      <select id="txCategory">
+        <option value="Salary">Salary</option>
+        <option value="Food">Food</option>
+        <option value="Bike/Fuel">Bike/Fuel</option>
+        <option value="Groceries">Groceries</option>
+        <option value="Bills">Bills</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Health">Health</option>
+        <option value="Travel">Travel</option>
+        <option value="Family">Family</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input id="txComment" type="text" placeholder="Comment (optional)">
+    </div>
+    <button class="btn btn-primary" onclick="addTransaction()">Save Transaction</button>
+  </div>
+
+  <!-- Budgets -->
+  <div class="card">
+    <h3 class="card-title">Budgets</h3>
+    <p class="card-subtitle">Monthly spending limits per category</p>
+    <div id="budgetList"></div>
+    <div class="budget-edit-section">
+      <div class="form-group">
+        <select id="budgetCategory">
+          <option value="Food">Food</option>
+          <option value="Bike/Fuel">Bike/Fuel</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Bills">Bills</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Health">Health</option>
+          <option value="Travel">Travel</option>
+          <option value="Family">Family</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <input id="budgetAmount" type="number" inputmode="numeric" placeholder="Budget limit">
+      </div>
+      <button class="btn btn-dark" onclick="setBudget()">Set Budget</button>
+    </div>
+  </div>
+
+  <!-- Udhaar (Debts) -->
+  <div class="card">
+    <h3 class="card-title">Udhaar (Owes)</h3>
+    <div class="form-group">
+      <select id="debtType">
+        <option value="receive">Person owes me</option>
+        <option value="pay">I owe person</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input id="debtPerson" type="text" placeholder="Person name">
+    </div>
+    <div class="form-group">
+      <input id="debtAmount" type="number" inputmode="numeric" placeholder="Amount">
+    </div>
+    <div class="form-group">
+      <input id="debtNote" type="text" placeholder="Reason (optional)">
+    </div>
+    <button class="btn btn-dark" onclick="addDebt()">Add Udhaar</button>
+    <div id="debtList"></div>
+  </div>
+
+  <!-- Reports -->
+  <div class="card">
+    <h3 class="card-title">Reports</h3>
+    <button class="btn btn-dark" onclick="showReport('week')">Weekly Report</button>
+    <button class="btn btn-dark" onclick="showReport('month')">Monthly Report</button>
+    <button class="btn btn-dark" onclick="showReport('all')">All Time Report</button>
+    <div id="reportOutput"></div>
+  </div>
+
+  <!-- Backup -->
+  <div class="card">
+    <h3 class="card-title">Backup</h3>
+    <button class="btn btn-dark" onclick="exportBackup()">Export Backup</button>
+    <div class="form-group" style="margin-top:10px">
+      <input type="file" id="importFile" accept=".json">
+    </div>
+    <button class="btn btn-dark" onclick="importBackup()">Import Backup</button>
+  </div>
+
+  <!-- Transactions -->
+  <div class="card">
+    <h3 class="card-title">Transactions</h3>
+    <div class="form-group">
+      <input id="txSearch" type="text" placeholder="Search transactions..." oninput="renderTransactions()">
+    </div>
+    <div id="txList"></div>
+  </div>
+
+</div>
+
+<!-- Edit Transaction Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h3 class="card-title">Edit Transaction</h3>
+    <input type="hidden" id="editId">
+    <div class="form-group">
+      <select id="editType">
+        <option value="income">+ Income / Salary</option>
+        <option value="expense">- Expense</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input id="editAmount" type="number" inputmode="numeric" placeholder="Amount">
+    </div>
+    <div class="form-group">
+      <select id="editCategory">
+        <option value="Salary">Salary</option>
+        <option value="Food">Food</option>
+        <option value="Bike/Fuel">Bike/Fuel</option>
+        <option value="Groceries">Groceries</option>
+        <option value="Bills">Bills</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Health">Health</option>
+        <option value="Travel">Travel</option>
+        <option value="Family">Family</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input id="editComment" type="text" placeholder="Comment">
+    </div>
+    <button class="btn btn-primary" onclick="saveEdit()">Update</button>
+    <button class="btn btn-cancel" onclick="closeEditModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Edit Debt Modal -->
+<div class="modal-overlay" id="editDebtModal">
+  <div class="modal">
+    <h3 class="card-title">Edit Udhaar</h3>
+    <input type="hidden" id="editDebtIdx">
+    <div class="form-group">
+      <select id="editDebtType">
+        <option value="receive">Person owes me</option>
+        <option value="pay">I owe person</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input id="editDebtPerson" type="text" placeholder="Person name">
+    </div>
+    <div class="form-group">
+      <input id="editDebtAmount" type="number" inputmode="numeric" placeholder="Amount">
+    </div>
+    <div class="form-group">
+      <input id="editDebtNote" type="text" placeholder="Reason">
+    </div>
+    <button class="btn btn-primary" onclick="saveDebtEdit()">Update</button>
+    <button class="btn btn-cancel" onclick="closeDebtEditModal()">Cancel</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
 </html>
