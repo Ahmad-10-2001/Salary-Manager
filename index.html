@@ -1,183 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Salary Manager</title>
-
-<link rel="stylesheet" href="style.css">
-
-<link rel="manifest" href="manifest.json">
-
-</head>
-
-
-<body>
-
-
-<div class="container">
-
-
-<h1>💰 Salary Manager</h1>
-
-
-
-<div class="card balance-card">
-
-<p>Current Balance</p>
-
-<h2 id="balance">0</h2>
-
-</div>
-
-
-
-
-<div class="card">
-
-
-<h3>Add Transaction</h3>
-
-
-<select id="type">
-
-<option value="income">+ Income</option>
-
-<option value="expense">- Expense</option>
-
-</select>
-
-
-
-<input id="amount"
-type="number"
-placeholder="Amount">
-
-
-
-<select id="category">
-
-<option>Salary</option>
-<option>Food</option>
-<option>Bike/Fuel</option>
-<option>Groceries</option>
-<option>Bills</option>
-<option>Shopping</option>
-<option>Health</option>
-<option>Travel</option>
-<option>Family</option>
-<option>Other</option>
-
-</select>
-
-
-
-<input id="comment"
-placeholder="Comment">
-
-
-
-<button onclick="addTransaction()">
-Save
-</button>
-
-
-</div>
-
-
-
-
-
-<div class="card">
-
-<h3>Reports</h3>
-
-
-<button onclick="showWeekly()">
-Weekly Report
-</button>
-
-
-<button onclick="showMonthly()">
-Monthly Report
-</button>
-
-
-<div id="report"></div>
-
-
-</div>
-
-
-
-
-
-<div class="card">
-
-
-<h3>Backup</h3>
-
-
-<button onclick="exportData()">
-Export Backup
-</button>
-
-
-<input type="file"
-id="importFile"
-accept=".json">
-
-
-<button onclick="importData()">
-Import Backup
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-<div class="card">
-
-
-<h3>Transactions</h3>
-
-
-<div id="transactions"></div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-<script src="script.js"></script>
-
-
-<script>
-
-if ("serviceWorker" in navigator) {
-
-navigator.serviceWorker.register(
-"service-worker.js"
-);
-
-}
-
-</script>
-
-
-</body>
-
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Salary Manager V3</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>💰 Salary Manager</h1>
+      <div class="card">
+        <h3>Balance</h3>
+        <h1 id="balance">0</h1>
+      </div>
+      <div class="card">
+        <h3>Add Transaction</h3>
+        <select id="type">
+          <option value="income">+ Income / Salary</option>
+          <option value="expense">- Expense</option></select
+        ><input id="amount" type="number" placeholder="Amount" /><select
+          id="category"
+        >
+          <option>Salary</option>
+          <option>Food</option>
+          <option>Bike/Fuel</option>
+          <option>Groceries</option>
+          <option>Bills</option>
+          <option>Shopping</option>
+          <option>Health</option>
+          <option>Travel</option>
+          <option>Family</option>
+          <option>Other</option></select
+        ><input id="comment" placeholder="Comment" /><button
+          onclick="addTransaction()"
+        >
+          Save
+        </button>
+      </div>
+      <div class="card">
+        <h3>Budgets</h3>
+        <div id="budgets"></div>
+      </div>
+      <div class="card">
+        <h3>Udhaar</h3>
+        <select id="debtType">
+          <option value="receive">Person owes me</option>
+          <option value="pay">I owe person</option></select
+        ><input id="person" placeholder="Person" /><input
+          id="debtAmount"
+          type="number"
+          placeholder="Amount"
+        /><input id="debtNote" placeholder="Reason" /><button
+          onclick="addDebt()"
+        >
+          Add
+        </button>
+        <div id="debts"></div>
+      </div>
+      <div class="card">
+        <h3>Reports</h3>
+        <div id="report"></div>
+      </div>
+      <div class="card">
+        <h3>Transactions</h3>
+        <div id="transactions"></div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>
