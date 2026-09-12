@@ -1,54 +1,468 @@
-body {
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    Segoe UI,
-    sans-serif;
-  background: #f2f2f7;
-  padding: 15px;
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  background: #f2f2f7;
+  color: #1c1c1e;
+  padding: 15px;
+  padding-top: max(15px, env(safe-area-inset-top));
+  padding-bottom: max(30px, env(safe-area-inset-bottom));
+  padding-left: max(15px, env(safe-area-inset-left));
+  padding-right: max(15px, env(safe-area-inset-right));
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== CONTAINER ===== */
 .container {
   max-width: 600px;
-  margin: auto;
+  margin: 0 auto;
 }
-.card {
-  background: white;
-  padding: 18px;
-  border-radius: 18px;
+
+/* ===== APP TITLE ===== */
+.app-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
   margin-bottom: 15px;
-  box-shadow: 0 2px 8px #0002;
+  padding: 10px 0;
 }
-input,
-select,
-button {
-  width: 100%;
-  padding: 13px;
-  margin: 6px 0;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+
+/* ===== CARDS ===== */
+.card {
+  background: #fff;
+  padding: 18px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
-button {
-  background: #111;
-  color: white;
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
 }
-.income {
-  color: green;
+
+.card-subtitle {
+  font-size: 13px;
+  color: #8e8e93;
+  margin-top: -8px;
+  margin-bottom: 12px;
 }
-.expense {
-  color: red;
+
+/* ===== BALANCE CARD ===== */
+.balance-card {
+  background: linear-gradient(135deg, #1c1c1e, #2c2c2e);
+  color: #fff;
+  text-align: center;
 }
-.progress {
-  background: #ddd;
-  height: 12px;
-  border-radius: 10px;
+
+.balance-label {
+  font-size: 14px;
+  opacity: 0.7;
+  margin-bottom: 4px;
 }
-.bar {
-  height: 12px;
-  background: #111;
-  border-radius: 10px;
+
+.balance-amount {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 14px;
+  word-break: break-all;
 }
-.item {
+
+.balance-row {
+  display: flex;
+  gap: 10px;
+}
+
+.balance-sub {
+  flex: 1;
   padding: 10px;
-  border-bottom: 1px solid #eee;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
 }
+
+.balance-sub-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.8;
+  margin-bottom: 2px;
+}
+
+.income-bg {
+  background: rgba(52, 199, 89, 0.2);
+  color: #34c759;
+}
+
+.expense-bg {
+  background: rgba(255, 59, 48, 0.2);
+  color: #ff3b30;
+}
+
+/* ===== FORM ELEMENTS ===== */
+.form-group {
+  margin-bottom: 10px;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d1d1d6;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #f9f9fb;
+  color: #1c1c1e;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: #007aff;
+  background: #fff;
+}
+
+input[type="file"] {
+  padding: 10px;
+  font-size: 14px;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238e8e93' d='M6 8.5L1 3.5h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+  opacity: 0.7;
+}
+
+.btn-primary {
+  background: #007aff;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.btn-dark {
+  background: #1c1c1e;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.btn-cancel {
+  background: #e5e5ea;
+  color: #1c1c1e;
+}
+
+.btn-edit {
+  background: #007aff;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1;
+}
+
+.btn-delete {
+  background: #ff3b30;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1;
+}
+
+.btn-settle {
+  background: #34c759;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1;
+}
+
+/* ===== TRANSACTION ITEMS ===== */
+.tx-item {
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tx-item:last-child {
+  border-bottom: none;
+}
+
+.tx-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.tx-amount {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.tx-amount.income {
+  color: #34c759;
+}
+
+.tx-amount.expense {
+  color: #ff3b30;
+}
+
+.tx-category {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1c1c1e;
+}
+
+.tx-detail {
+  font-size: 13px;
+  color: #8e8e93;
+  margin-top: 2px;
+}
+
+.tx-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* ===== DEBT ITEMS ===== */
+.debt-item {
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.debt-item:last-child {
+  border-bottom: none;
+}
+
+.debt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.debt-person {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.debt-amount {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.debt-amount.receive {
+  color: #34c759;
+}
+
+.debt-amount.pay {
+  color: #ff3b30;
+}
+
+.debt-detail {
+  font-size: 13px;
+  color: #8e8e93;
+  margin-top: 2px;
+}
+
+.debt-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* ===== BUDGET ITEMS ===== */
+.budget-item {
+  margin-bottom: 14px;
+}
+
+.budget-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.budget-spent {
+  color: #8e8e93;
+}
+
+.progress-bar {
+  background: #e5e5ea;
+  border-radius: 6px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.progress-fill.ok {
+  background: #34c759;
+}
+
+.progress-fill.warn {
+  background: #ff9500;
+}
+
+.progress-fill.over {
+  background: #ff3b30;
+}
+
+.budget-edit-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* ===== REPORT ===== */
+.report-section {
+  margin-top: 14px;
+  padding: 14px;
+  background: #f9f9fb;
+  border-radius: 12px;
+}
+
+.report-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+}
+
+.report-row:last-child {
+  border-bottom: none;
+}
+
+.report-row .label {
+  font-weight: 500;
+}
+
+.report-row .value {
+  font-weight: 700;
+}
+
+.report-period {
+  font-size: 13px;
+  color: #8e8e93;
+  margin-bottom: 10px;
+}
+
+.report-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 16px;
+  font-weight: 700;
+  border-top: 2px solid #ddd;
+  margin-top: 4px;
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #8e8e93;
+  font-size: 14px;
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: max(30px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #1c1c1e;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  z-index: 2000;
+  transition: transform 0.3s ease;
+  white-space: nowrap;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===== UTILITIES ===== */
+.mt-10 { margin-top: 10px; }
+.text-center { text-align: center; }
