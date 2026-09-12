@@ -1,337 +1,85 @@
-let transactions =
-JSON.parse(localStorage.getItem("transactions")) || [];
-
-
-
-function save(){
-
-localStorage.setItem(
-"transactions",
-JSON.stringify(transactions)
+let transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+let debts = JSON.parse(localStorage.getItem("debts") || "[]");
+let budgets = JSON.parse(
+  localStorage.getItem("budgets") ||
+    '{"Bike/Fuel":10000,"Food":10000,"Groceries":8000,"Bills":5000}',
 );
-
-render();
-
+function save() {
+  localStorage.setItem("transactions", JSON.stringify(transactions));
+  localStorage.setItem("debts", JSON.stringify(debts));
+  localStorage.setItem("budgets", JSON.stringify(budgets));
+  render();
 }
-
-
-
-
-
-function addTransaction(){
-
-
-let item={
-
-id:Date.now(),
-
-type:document.getElementById("type").value,
-
-amount:Number(
-document.getElementById("amount").value
-),
-
-category:
-document.getElementById("category").value,
-
-
-comment:
-document.getElementById("comment").value,
-
-
-date:new Date().toISOString()
-
-
-};
-
-
-
-if(!item.amount){
-
-alert("Enter amount");
-
-return;
-
+function addTransaction() {
+  let x = {
+    id: Date.now(),
+    type: type.value,
+    amount: +amount.value,
+    category: category.value,
+    comment: comment.value,
+    date: new Date().toISOString(),
+  };
+  if (x.amount) {
+    transactions.unshift(x);
+    save();
+  }
 }
-
-
-transactions.unshift(item);
-
-
-save();
-
-
+function addDebt() {
+  debts.push({
+    type: debtType.value,
+    person: person.value,
+    amount: +debtAmount.value,
+    note: debtNote.value,
+  });
+  save();
 }
-
-
-
-
-
-function deleteTransaction(id){
-
-
-transactions =
-transactions.filter(
-x=>x.id!==id
-);
-
-
-save();
-
-
+function render() {
+  let b = 0,
+    s = {};
+  transactions.forEach((t) => {
+    b += t.type == "income" ? t.amount : -t.amount;
+    if (t.type == "expense") s[t.category] = (s[t.category] || 0) + t.amount;
+  });
+  balance.innerHTML = b.toLocaleString();
+  budgets.innerHTML = Object.keys(budgets)
+    .map((c) => {
+      let u = s[c] || 0;
+      return (
+        c +
+        ": " +
+        u +
+        "/" +
+        budgets[c] +
+        '<div class="progress"><div class="bar" style="width:' +
+        Math.min(100, (u / budgets[c]) * 100) +
+        '%"></div></div>'
+      );
+    })
+    .join("");
+  report.innerHTML =
+    Object.keys(s)
+      .filter((x) => s[x] > 0)
+      .map((x) => x + ": " + s[x])
+      .join("<br>") || "No spending";
+  transactions.innerHTML = transactions
+    .map(
+      (t) =>
+        '<div class="item"><b class="' +
+        t.type +
+        '">' +
+        (t.type == "income" ? "+" : "-") +
+        t.amount +
+        "</b><br>" +
+        t.category +
+        " " +
+        t.comment +
+        "<br>" +
+        new Date(t.date).toLocaleString() +
+        "</div>",
+    )
+    .join("");
+  debts.innerHTML = debts
+    .map((d) => d.person + " : " + d.amount + " (" + d.type + ")")
+    .join("<br>");
 }
-
-
-
-
-function editTransaction(id){
-
-
-let item =
-transactions.find(
-x=>x.id===id
-);
-
-
-let amount =
-prompt(
-"Update amount",
-item.amount
-);
-
-
-if(amount){
-
-item.amount=Number(amount);
-
-save();
-
-}
-
-
-}
-
-
-
-
-function render(){
-
-
-let balance=0;
-
-
-let html="";
-
-
-
-transactions.forEach(t=>{
-
-
-if(t.type==="income")
-balance+=t.amount;
-
-else
-balance-=t.amount;
-
-
-
-html+=`
-
-<div class="transaction">
-
-
-<div class="${t.type}">
-
-${t.type==="income"?"+":"-"}
-${t.amount}
-
-</div>
-
-
-<b>${t.category}</b>
-
-<br>
-
-${t.comment}
-
-
-<div class="date">
-
-${new Date(t.date).toLocaleString()}
-
-</div>
-
-
-
-<button class="edit"
-onclick="editTransaction(${t.id})">
-
-Edit
-
-</button>
-
-
-<button class="delete"
-onclick="deleteTransaction(${t.id})">
-
-Delete
-
-</button>
-
-
-
-</div>
-
-`;
-
-});
-
-
-
-document.getElementById("balance")
-.innerText=
-balance.toLocaleString();
-
-
-
-document.getElementById("transactions")
-.innerHTML=
-html || "No transactions";
-
-
-}
-
-
-
-
-function report(days){
-
-
-let total={};
-
-
-let limit =
-Date.now()-days*86400000;
-
-
-
-transactions.forEach(t=>{
-
-
-if(
-t.type==="expense" &&
-new Date(t.date).getTime()>limit
-){
-
-
-total[t.category]=
-(total[t.category]||0)
-+t.amount;
-
-
-}
-
-
-});
-
-
-
-return Object.keys(total)
-.map(
-x=>`${x}: ${total[x]}`
-)
-.join("<br>");
-
-}
-
-
-
-function showWeekly(){
-
-document.getElementById("report")
-.innerHTML=
-report(7)||"No expenses";
-
-}
-
-
-
-function showMonthly(){
-
-document.getElementById("report")
-.innerHTML=
-report(30)||"No expenses";
-
-}
-
-
-
-
-function exportData(){
-
-
-let blob =
-new Blob(
-[
-JSON.stringify(transactions)
-],
-{
-type:"application/json"
-}
-);
-
-
-let a=document.createElement("a");
-
-
-a.href=
-URL.createObjectURL(blob);
-
-
-a.download=
-"salary-backup.json";
-
-
-a.click();
-
-
-}
-
-
-
-
-function importData(){
-
-
-let file =
-document.getElementById("importFile")
-.files[0];
-
-
-let reader =
-new FileReader();
-
-
-reader.onload=function(e){
-
-
-transactions =
-JSON.parse(e.target.result);
-
-
-save();
-
-
-};
-
-
-
-reader.readAsText(file);
-
-
-}
-
-
-
-
 render();
