@@ -40,7 +40,7 @@
     <h3 class="card-title">Add Transaction</h3>
     <div class="form-group">
       <select id="txType">
-        <option value="income">+ Income</option>
+        <option value="income">+ Income / Salary</option>
         <option value="expense">- Expense</option>
       </select>
     </div>
@@ -48,18 +48,7 @@
       <input id="txAmount" type="number" inputmode="numeric" placeholder="Amount (e.g. 5000)">
     </div>
     <div class="form-group">
-      <select id="txCategory">
-        <option value="Salary">Salary</option>
-        <option value="Food">Food</option>
-        <option value="Bike/Fuel">Bike</option>
-        <option value="Groceries">Groceries</option>
-        <option value="Bills">Bills</option>
-        <option value="Shopping">Shopping</option>
-        <option value="Health">Health</option>
-        <option value="Travel">Travel</option>
-        <option value="Family">Family</option>
-        <option value="Other">Other</option>
-      </select>
+      <select id="txCategory"></select>
     </div>
     <div class="form-group">
       <input id="txComment" type="text" placeholder="Comment (optional)">
@@ -74,17 +63,7 @@
     <div id="budgetList"></div>
     <div class="budget-edit-section">
       <div class="form-group">
-        <select id="budgetCategory">
-          <option value="Food">Food</option>
-          <option value="Bike/Fuel">Bike</option>
-          <option value="Groceries">Groceries</option>
-          <option value="Bills">Bills</option>
-          <option value="Shopping">Shopping</option>
-          <option value="Health">Health</option>
-          <option value="Travel">Travel</option>
-          <option value="Family">Family</option>
-          <option value="Other">Other</option>
-        </select>
+      <select id="budgetCategory"></select>
       </div>
       <div class="form-group">
         <input id="budgetAmount" type="number" inputmode="numeric" placeholder="Budget limit">
@@ -124,6 +103,19 @@
     <div id="reportOutput"></div>
   </div>
 
+  <!-- Manage Categories -->
+  <div class="card">
+    <h3 class="card-title">Manage Categories</h3>
+    <p class="card-subtitle">Add or remove spending categories</p>
+    <div id="categoryList"></div>
+    <div class="category-add-section">
+      <div class="form-group">
+        <input id="newCategoryName" type="text" placeholder="New category name">
+      </div>
+      <button class="btn btn-dark" onclick="addCategory()">Add Category</button>
+    </div>
+  </div>
+
   <!-- Backup -->
   <div class="card">
     <h3 class="card-title">Backup</h3>
@@ -152,7 +144,7 @@
     <input type="hidden" id="editId">
     <div class="form-group">
       <select id="editType">
-        <option value="income">+ Income</option>
+        <option value="income">+ Income / Salary</option>
         <option value="expense">- Expense</option>
       </select>
     </div>
@@ -160,18 +152,7 @@
       <input id="editAmount" type="number" inputmode="numeric" placeholder="Amount">
     </div>
     <div class="form-group">
-      <select id="editCategory">
-        <option value="Salary">Salary</option>
-        <option value="Food">Food</option>
-        <option value="Bike/Fuel">Bike</option>
-        <option value="Groceries">Groceries</option>
-        <option value="Bills">Bills</option>
-        <option value="Shopping">Shopping</option>
-        <option value="Health">Health</option>
-        <option value="Travel">Travel</option>
-        <option value="Family">Family</option>
-        <option value="Other">Other</option>
-      </select>
+      <select id="editCategory"></select>
     </div>
     <div class="form-group">
       <input id="editComment" type="text" placeholder="Comment">

@@ -1,9 +1,16 @@
+// ─── Default categories ───
+const DEFAULT_CATEGORIES = ['Salary', 'Food', 'Bike/Fuel', 'Groceries', 'Bills', 'Shopping', 'Health', 'Travel', 'Family', 'Other'];
+
 // ─── Data (prefixed to avoid collision with DOM IDs) ───
 let txData = JSON.parse(localStorage.getItem('transactions') || '[]');
 let debtData = JSON.parse(localStorage.getItem('debts') || '[]');
 let budgetData = JSON.parse(localStorage.getItem('budgets') || '{}');
+let categoryData = JSON.parse(localStorage.getItem('categories') || 'null');
 
-// Set default budgets if empty
+// Initialize defaults
+if (!categoryData) {
+  categoryData = [...DEFAULT_CATEGORIES];
+}
 if (Object.keys(budgetData).length === 0) {
   budgetData = { 'Food': 10000, 'Bike/Fuel': 10000, 'Groceries': 8000, 'Bills': 5000 };
 }
@@ -15,7 +22,89 @@ function saveAll() {
   localStorage.setItem('transactions', JSON.stringify(txData));
   localStorage.setItem('debts', JSON.stringify(debtData));
   localStorage.setItem('budgets', JSON.stringify(budgetData));
+  localStorage.setItem('categories', JSON.stringify(categoryData));
   renderAll();
+}
+
+// Populate a <select> element with current categories
+function populateSelect(selectId, selectedValue) {
+  let sel = $(selectId);
+  if (!sel) return;
+  let current = sel.value;
+  sel.innerHTML = '';
+  categoryData.forEach(cat => {
+    let opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    sel.appendChild(opt);
+  });
+  // Restore selected value if it exists in the list
+  if (selectedValue && categoryData.includes(selectedValue)) {
+    sel.value = selectedValue;
+  } else if (current && categoryData.includes(current)) {
+    sel.value = current;
+  }
+}
+
+// Populate all category dropdowns across the app
+function populateAllSelects() {
+  populateSelect('txCategory');
+  populateSelect('budgetCategory');
+  populateSelect('editCategory');
+}
+
+// ─── Category Management ───
+function addCategory() {
+  let name = $('newCategoryName').value.trim();
+  if (!name) {
+    toast('Please enter a category name');
+    return;
+  }
+  if (categoryData.some(c => c.toLowerCase() === name.toLowerCase())) {
+    toast('Category already exists');
+    return;
+  }
+  categoryData.push(name);
+  $('newCategoryName').value = '';
+  saveAll();
+  toast('Category "' + name + '" added!');
+}
+
+function removeCategory(name) {
+  let usedCount = txData.filter(t => t.category === name).length;
+  let msg = 'Remove category "' + name + '"?';
+  if (usedCount > 0) {
+    msg += '\n\n⚠️ ' + usedCount + ' transaction(s) use this category. They will keep their category but you won\'t see it in dropdowns.';
+  }
+  if (!confirm(msg)) return;
+
+  categoryData = categoryData.filter(c => c !== name);
+  // Also remove the budget if it exists
+  if (budgetData[name]) {
+    delete budgetData[name];
+  }
+  saveAll();
+  toast('Category "' + name + '" removed');
+}
+
+function renderCategories() {
+  let html = '';
+  if (categoryData.length === 0) {
+    html = '<div class="empty-state">No categories. Add some below.</div>';
+  } else {
+    categoryData.forEach(cat => {
+      let count = txData.filter(t => t.category === cat).length;
+      html += '<div class="category-item">';
+      html += '<div class="category-info">';
+      html += '<span class="category-name">' + escapeHtml(cat) + '</span>';
+      html += '<span class="category-count">' + count + ' transactions</span>';
+      html += '</div>';
+      html += '<button class="btn-delete-sm" onclick="removeCategory(\'' + escapeHtml(cat).replace(/'/g, "\\'") + '\')">✕</button>';
+      html += '</div>';
+    });
+  }
+  $('categoryList').innerHTML = html;
+  populateAllSelects();
 }
 
 function toast(msg) {
@@ -83,7 +172,7 @@ function openEditModal(id) {
   $('editId').value = id;
   $('editType').value = tx.type;
   $('editAmount').value = tx.amount;
-  $('editCategory').value = tx.category;
+  populateSelect('editCategory', tx.category);
   $('editComment').value = tx.comment || '';
   $('editModal').classList.add('active');
 }
@@ -274,8 +363,9 @@ function exportBackup() {
     transactions: txData,
     debts: debtData,
     budgets: budgetData,
+    categories: categoryData,
     exportDate: new Date().toISOString(),
-    version: 4
+    version: 5
   };
 
   let blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -314,6 +404,7 @@ function importBackup() {
       txData = data.transactions || [];
       debtData = data.debts || [];
       budgetData = data.budgets || {};
+      categoryData = data.categories || [...DEFAULT_CATEGORIES];
 
       saveAll();
       fileInput.value = '';
@@ -484,6 +575,7 @@ function escapeHtml(str) {
 }
 
 function renderAll() {
+  renderCategories();
   renderBalance();
   renderBudgets();
   renderTransactions();
